@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -12,16 +12,20 @@ const LoginPage = () => {
   const toggleSignin = () => {
     navigate("/signin");
   };
-  
+  axios.defaults.withCredentials = true;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:5000/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/user/login",
+        {
+          email,
+          password,
+        }
+      );
       if (response.data.success) {
         navigate("/");
       } else {
@@ -66,7 +70,7 @@ const LoginPage = () => {
           <SubmitButton type="submit">Login</SubmitButton>
         </form>
         <SignInOption>
-          <p>Doesn't have an account ?</p>
+          <p>Doesnt have an account ?</p>
           <h5 onClick={toggleSignin}>Signin</h5>
         </SignInOption>
       </LoginBox>

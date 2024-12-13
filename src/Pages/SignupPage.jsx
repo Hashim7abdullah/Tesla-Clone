@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -15,7 +15,7 @@ const SignupPage = () => {
     e.preventDefault(); // Prevents page refresh on form submission
 
     try {
-      const response = await axios.post("http://localhost:5000/signin", {
+      const response = await axios.post("http://localhost:5000/api/user/signin", {
         name,
         email,
         password,
@@ -36,6 +36,8 @@ const SignupPage = () => {
   return (
     <Container>
       <h2>Sign In to Continue</h2>
+      {error && <ErrorMessage>{error}</ErrorMessage>}
+
       <SignupBody>
         <form onSubmit={handleSubmit}>
           <label>Username :</label>
@@ -90,11 +92,17 @@ const Container = styled.div`
   gap: 20px;
   padding: 20px;
   overflow-y: auto;
-  h2{
+  h2 {
     @media (max-width: 768px) {
       font-size: medium;
     }
   }
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
 `;
 
 const SignupBody = styled.div`
@@ -149,7 +157,7 @@ const SignupBody = styled.div`
     transition: background 0.3s ease;
 
     &:hover {
-      background: #0056b3;;
+      background: #0056b3;
     }
   }
 
