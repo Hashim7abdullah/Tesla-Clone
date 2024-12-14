@@ -14,20 +14,21 @@ const Header = () => {
 
   const handleSupport = () => navigate("/support");
   const handleSignUp = () => navigate("/login");
-  
 
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownVehicleOpen, setIsDropdownVehicleOpen] = useState(false);
   const [isDropdownEnergyOpen, setIsDropdownEnergyOpen] = useState(false);
   const [isDropdownChargerOpen, setIsDropdownChargerOpen] = useState(false);
   const [isDropdownDiscoverOpen, setIsDropdownDiscoverOpen] = useState(false);
-  const [isDropdownCountryOpen , setIsCountryDropdownOpen] = useState(false);
+  const [isDropdownCountryOpen, setIsCountryDropdownOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+  const toggleProfileDropdown = () =>
+    setIsProfileDropdownOpen(!isProfileDropdownOpen);
 
-  
   const toggleCountryDropdown = () => {
     setIsCountryDropdownOpen(!isDropdownCountryOpen);
   };
@@ -79,6 +80,12 @@ const Header = () => {
       ) {
         setIsCountryDropdownOpen(false);
       }
+      if (
+        isProfileDropdownOpen &&
+        !event.target.closest(".profile-dropdown-container")
+      ) {
+        setIsProfileDropdownOpen(false);
+      }
     };
 
     document.addEventListener("click", handleClickOutside);
@@ -91,6 +98,7 @@ const Header = () => {
     isDropdownChargerOpen,
     isDropdownDiscoverOpen,
     isDropdownCountryOpen,
+    isProfileDropdownOpen,
   ]);
 
   return (
@@ -107,8 +115,28 @@ const Header = () => {
       </Menu>
       <RightMenu>
         <Image onClick={handleSupport} src="/src/assets/help.svg" alt="" />
-        <Image onMouseEnter={toggleCountryDropdown} src="/src/assets/web.png" alt="" />
-        <Image onClick={handleSignUp} src="/src/assets/profile.png" alt="" />
+        <Image
+          onMouseEnter={toggleCountryDropdown}
+          src="/src/assets/web.png"
+          alt=""
+        />
+        <ProfileContainer>
+          <Image
+            onClick={toggleProfileDropdown}
+            src="/src/assets/profile.png"
+            alt="Profile"
+          />
+          {isProfileDropdownOpen && (
+            <ProfileDropdown className="profile-dropdown-container">
+              <DropdownItem onClick={() => navigate("/profile")}>
+                Profile Settings
+              </DropdownItem>
+              <DropdownItem onClick={() => navigate("/logout")}>
+                Logout
+              </DropdownItem>
+            </ProfileDropdown>
+          )}
+        </ProfileContainer>{" "}
       </RightMenu>
       <BurgerMenu onClick={toggleMenu}>
         <BurgerLine />
@@ -159,6 +187,16 @@ const Header = () => {
           />
         </DropdownCountryContainer>
       )}
+      {isProfileDropdownOpen && (
+        <ProfileDropdown className="profile-dropdown-container">
+    <DropdownItem onClick={() => navigate("/profile")}>
+      Profile Settings
+    </DropdownItem>
+    <DropdownItem onClick={() => navigate("/logout")}>
+      Logout
+    </DropdownItem>
+  </ProfileDropdown>
+      )}
     </Container>
   );
 };
@@ -173,6 +211,32 @@ const slideDown = keyframes`
   100% {
     transform: translateY(0);
     opacity: 1;
+  }
+`;
+
+const ProfileContainer = styled.div`
+  position: relative;
+`;
+
+const ProfileDropdown = styled.div`
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 10;
+`;
+
+const DropdownItem = styled.div`
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+
+  &:hover {
+    background-color: #f0f0f0;
   }
 `;
 

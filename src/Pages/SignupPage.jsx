@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { Axios } from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -10,19 +10,23 @@ const SignupPage = () => {
   const [password, setPassword] = useState(""); // Stores the password
   const [error, setError] = useState(""); // Stores the error message
   const navigate = useNavigate(); // For navigating between pages
+  axios.defaults.withCredentials = true;
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevents page refresh on form submission
 
     try {
-      const response = await axios.post("http://localhost:5000/api/user/signin", {
-        name,
-        email,
-        password,
-        number,
-      }); // Sends form data to the backend API
+      const response = await axios.post(
+        "http://localhost:5000/api/user/signin",
+        {
+          name,
+          email,
+          password,
+          number,
+        }
+      ); // Sends form data to the backend API
 
-      if (response.data.message === "User created successfully") {
+      if (response.data.message === "User registered successfully") {
         console.log("User created successfully");
         navigate("/login"); // Navigates to login page if successful
       } else {
